@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { setFBID } from '../actions';
@@ -12,13 +12,14 @@ const Container = styled.div`
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const ref = useRef();
 
   useEffect(() => {
     window.fbAsyncInit = () => {
       FB.init({
         appId: process.env.REACT_APP_FB_APPID,
         cookie: true,
-        xfbml: true,
+        xfbml: false,
         version: 'v9.0',
       });
 
@@ -29,13 +30,14 @@ const Login = () => {
         } else {
           setLoading(false);
           FB.Event.subscribe('auth.login', () => window.location.reload());
+          FB.XFBML.parse(ref.current);
         }
       });
     };
   }, []);
 
   return loading ? null : (
-    <Container>
+    <Container ref={ref}>
       <div
         className="fb-login-button"
         data-size="large"
