@@ -36,7 +36,8 @@ const Video = ({ video, action, actionLabel = '點歌' }) => {
   return (
     <Container>
       <Cover src={image} />
-      <Title>1{title}</Title>
+      <Title>{title}</Title>
+
       {action && (
         <Action>
           <ActionButton onClick={action}>{actionLabel}</ActionButton>
