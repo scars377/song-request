@@ -15,24 +15,24 @@ const Login = () => {
   const ref = useRef();
 
   useEffect(() => {
-    // window.fbAsyncInit = () => {
-    FB.init({
-      appId: process.env.REACT_APP_FB_APPID,
-      cookie: true,
-      xfbml: false,
-      version: 'v9.0',
-    });
+    window.fbLoad.then(() => {
+      FB.init({
+        appId: process.env.REACT_APP_FB_APPID,
+        cookie: true,
+        xfbml: false,
+        version: 'v9.0',
+      });
 
-    FB.getLoginStatus(({ status, authResponse }) => {
-      if (status === 'connected' && authResponse.userID) {
-        dispatch(setFBID(authResponse.userID));
-      } else {
-        setLoading(false);
-        FB.Event.subscribe('auth.login', () => window.location.reload());
-        FB.XFBML.parse(ref.current);
-      }
+      FB.getLoginStatus(({ status, authResponse }) => {
+        if (status === 'connected' && authResponse.userID) {
+          dispatch(setFBID(authResponse.userID));
+        } else {
+          setLoading(false);
+          FB.Event.subscribe('auth.login', () => window.location.reload());
+          FB.XFBML.parse(ref.current);
+        }
+      });
     });
-    // };
   }, []);
 
   return loading ? null : (
