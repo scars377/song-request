@@ -10,30 +10,29 @@ const Container = styled.div`
 `;
 
 const Login = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const ref = useRef();
 
   useEffect(() => {
-    window.fbAsyncInit = () => {
-      FB.init({
-        appId: process.env.REACT_APP_FB_APPID,
-        cookie: true,
-        xfbml: false,
-        version: 'v9.0',
-      });
+    // window.fbAsyncInit = () => {
+    FB.init({
+      appId: process.env.REACT_APP_FB_APPID,
+      cookie: true,
+      xfbml: false,
+      version: 'v9.0',
+    });
 
-      setLoading(true);
-      FB.getLoginStatus(({ status, authResponse }) => {
-        if (status === 'connected') {
-          dispatch(setFBID(authResponse.userID));
-        } else {
-          setLoading(false);
-          FB.Event.subscribe('auth.login', () => window.location.reload());
-          FB.XFBML.parse(ref.current);
-        }
-      });
-    };
+    FB.getLoginStatus(({ status, authResponse }) => {
+      if (status === 'connected' && authResponse.userID) {
+        dispatch(setFBID(authResponse.userID));
+      } else {
+        setLoading(false);
+        FB.Event.subscribe('auth.login', () => window.location.reload());
+        FB.XFBML.parse(ref.current);
+      }
+    });
+    // };
   }, []);
 
   return loading ? null : (
