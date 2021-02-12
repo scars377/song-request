@@ -18,6 +18,7 @@ app.use('/api', api);
 
 const start = async () => {
   await PlayList.getInstance().setId(PLAYLIST_ID).getItems();
+  console.log('playlist loaded');
   app.use(express.static(path.resolve(__dirname, '../build')));
 };
 
