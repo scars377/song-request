@@ -4,16 +4,16 @@ import { handleActions } from 'redux-actions';
 import * as actions from './actions';
 
 const INIT_STATE = {
-  fbid: '',
+  isAdmin: false,
   requests: [],
   playlist: [],
 };
 
 const reducers = handleActions(
   {
-    [actions.setFBID]: (state, { payload }) => ({
+    [actions.setAdmin]: (state, { payload }) => ({
       ...state,
-      fbid: payload,
+      isAdmin: payload,
     }),
 
     [actions.requestAdd]: (state, { payload }) => ({

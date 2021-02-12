@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import * as api from './api';
 
-export const setFBID = createAction('SET_FBID');
+export const setAdmin = createAction('SET_ADMIN');
 export const setRequests = createAction('SET_REQUESTS');
 export const setPlaylist = createAction('SET_PLAYLIST');
 export const requestAdd = createAction('REQUEST_ADD');

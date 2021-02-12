@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
-import { requestAdd, requestRemove } from '../actions';
+import { requestAdd, requestRemove, setAdmin } from '../actions';
 import Player from './Player';
 import Playlist from './Playlist';
 import Requests from './Requests';
-import Login from './Login';
+import sha256 from 'crypto-js/sha256';
 
 const Global = createGlobalStyle`
   html, body {
@@ -16,10 +16,23 @@ const Global = createGlobalStyle`
   }
 `;
 
+const SALT = process.env.REACT_APP_PW_SALT;
+const HASH = process.env.REACT_APP_PW_HASH;
+
 function App() {
-  const fbid = useSelector((state) => state.fbid);
+  const isAdmin = useSelector((state) => state.isAdmin);
   const dispatch = useDispatch();
-  const isAdmin = process.env.REACT_APP_ADMIN_ID?.split(',')?.includes(fbid);
+
+  const login = (e) => {
+    e.preventDefault();
+    const input = prompt('管理密碼');
+    console.log(sha256(input + SALT).toString());
+    if (sha256(input + SALT).toString() === HASH) {
+      dispatch(setAdmin(true));
+    } else {
+      alert('錯囉');
+    }
+  };
 
   useEffect(() => {
     const socket = window.io();
@@ -30,18 +43,17 @@ function App() {
   return (
     <div>
       <Global />
-      {!fbid ? (
-        <Login />
-      ) : (
-        <>
-          {isAdmin && <Player />}
-          <div style={{ padding: '0 0.5em' }}>
-            <Requests isAdmin={isAdmin} />
-            <div style={{ height: '3em' }} />
-            <Playlist />
-          </div>
-        </>
-      )}
+      {isAdmin && <Player />}
+      <div style={{ padding: '0 0.5em' }}>
+        {!isAdmin && (
+          <button style={{ float: 'right' }} onClick={login}>
+            登入
+          </button>
+        )}
+        <Requests isAdmin={isAdmin} />
+        <div style={{ height: '3em' }} />
+        <Playlist />
+      </div>
     </div>
   );
 }
