@@ -26,7 +26,6 @@ function App() {
   const login = (e) => {
     e.preventDefault();
     const input = prompt('管理密碼');
-    console.log(sha256(input + SALT).toString());
     if (sha256(input + SALT).toString() === HASH) {
       dispatch(setAdmin(true));
     } else {
