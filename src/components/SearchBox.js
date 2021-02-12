@@ -13,8 +13,11 @@ const Button = styled.button`
 const SearchBox = ({ value = '', onValue = () => {} }) => {
   return (
     <div>
-      <span>搜尋</span>
-      <Input value={value} onChange={(e) => onValue(e.target.value)} />
+      <Input
+        value={value}
+        onChange={(e) => onValue(e.target.value)}
+        placeholder="搜尋"
+      />
       <Button onClick={() => onValue('')}>清除</Button>
     </div>
   );
